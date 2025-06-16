@@ -32,4 +32,4 @@ jobs:
           ignore-unfixed: true 
           vuln-type: 'os,library' 
           severity: 'CRITICAL,HIGH,LOW,MEDIUM' 
-          trivy-flags: '--vex openvex.json'
+          trivy-config: 'trivy.yaml'
