@@ -13,6 +13,7 @@ jobs:
 
     permissions:
       security-events: write
+      contens: read
 
     steps:
       - name: Checkout code
