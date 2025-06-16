@@ -19,7 +19,7 @@ jobs:
         with:
           scan-type: 'fs'
           format: 'table'
-          exit-code: '0' 
+          exit-code: '1' 
           ignore-unfixed: true
           scanners: 'vuln,secret,config'
 
@@ -37,6 +37,6 @@ jobs:
           scan-type: 'image'
           image-ref: 'csharp-app:${{ github.sha }}'
           format: 'table'
-          exit-code: '0'
+          exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
