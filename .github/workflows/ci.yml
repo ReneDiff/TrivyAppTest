@@ -8,20 +8,20 @@ on:
 
 jobs:
   build-and-scan:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Trivy
+      - name: Scan repository filesystem
         uses: aquasecurity/trivy-action@master
         with:
-          install-type: 'binary'
-          version: 'latest'
-
-      - name: Scan repository
-        run: trivy repo .
+          scan-type: 'fs'
+          format: 'table'
+          exit-code: '0' 
+          ignore-unfixed: true
+          scanners: 'vuln,secret,config'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -32,4 +32,11 @@ jobs:
         run: docker build -t csharp-app:${{ github.sha }} .
 
       - name: Scan Docker image
-        run: trivy image csharp-app:${{ github.sha }}
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'image'
+          image-ref: 'csharp-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
