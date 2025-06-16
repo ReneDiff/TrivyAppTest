@@ -8,8 +8,11 @@ on:
 
 jobs:
   build_and_scan:
-    name: Build and Scan
+    name: Build, Scan and report
     runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
 
     steps:
       - name: Checkout code
@@ -23,26 +26,19 @@ jobs:
           load: true 
           tags: localbuild/trivyapptest:latest 
 
-      - name: Generate SBOM
-        uses: aquasecurity/trivy-action@0.24.0
-        with:
-          image-ref: 'localbuild/trivyapptest-alpine:latest'
-          format: 'cyclonedx' 
-          output: 'sbom.json' 
-
-      - name: Run Trivy vulnerability scanner
+      - name: Run Trivy vulnerability scanner and generate SARIF report
         uses: aquasecurity/trivy-action@0.24.0 
         with:
           image-ref: 'localbuild/trivyapptest:latest' 
-          format: 'table' 
+          format: 'sarif' 
+          output: 'trivy-results.sarif'
           exit-code: '1'
           ignore-unfixed: true 
           vuln-type: 'os,library' 
           severity: 'CRITICAL,HIGH,LOW,MEDIUM' 
           trivy-config: 'trivy.yaml'
         
-      - name: Upload SBOM as a build artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          name: sbom-json
-          path: sbom.json
+          sarif_file: 'trivy-results.sarif'
