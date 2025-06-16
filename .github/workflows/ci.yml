@@ -1,4 +1,4 @@
-name: C# App Security Scan CI
+name: C# App Security Scan CI 
 
 on:
   push:
@@ -14,29 +14,44 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Scan repository filesystem
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          format: 'table'
-          exit-code: '1' 
-          ignore-unfixed: true
-          scanners: 'vuln,secret,config'
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
+      # Scanner filsystem og generer en SARIF-rapport
+      - name: Scan repository filesystem
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          exit-code: '0'
+          ignore-unfixed: true
+          scanners: 'vuln,secret,config'
+          format: 'sarif'
+          output: 'trivy-fs-results.sarif'
+
+      # Uploader filsystem-rapporten til GitHub Security
+      - name: Upload filesystem scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-fs-results.sarif'
+
       - name: Build Docker image
         run: docker build -t csharp-app:${{ github.sha }} .
 
+      # Scanner Docker image og generer en separat SARIF-rapport
       - name: Scan Docker image
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'image'
           image-ref: 'csharp-app:${{ github.sha }}'
-          format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+          format: 'sarif'
+          output: 'trivy-image-results.sarif'
+      
+      # Uploader image-rapporten til GitHub Security
+      - name: Upload image scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-image-results.sarif'
