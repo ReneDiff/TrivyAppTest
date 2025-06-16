@@ -1,0 +1,35 @@
+name: C# App Security Scan CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          install-type: 'binary'
+          version: 'latest'
+
+      - name: Scan repository
+        run: trivy repo .
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build Docker image
+        run: docker build -t csharp-app:${{ github.sha }} .
+
+      - name: Scan Docker image
+        run: trivy image csharp-app:${{ github.sha }}
