@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrivyAppTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cf90b41462dde855c41826f7507ebbd720f48390")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb169043bfeb7142db2c0e65c87e64026a8432ed")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrivyAppTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrivyAppTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

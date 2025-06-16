@@ -31,4 +31,5 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true 
           vuln-type: 'os,library' 
-          severity: 'CRITICAL,HIGH,LOW' 
+          severity: 'CRITICAL,HIGH,LOW,MEDIUM' 
+          trivy-flags: '--vex openvex.json'

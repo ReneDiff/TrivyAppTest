@@ -1,0 +1,23 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://example.com/vex/trivyapptest-vex-1",
+  "author": "Rene - Software Engineering",
+  "role": "Security",
+  "timestamp": "2025-06-16T10:30:00.000Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "name": "CVE-2023-45143"
+      },
+      "products": [
+        {
+          "@id": "pkg:oci/trivyapptest?repository_url=docker.io/library/localbuild"
+        }
+      ],
+      "status": "not_affected",
+      "justification": "component_not_present",
+      "impact_statement": "The vulnerable code in glibc is related to DNS resolution functions that are not used by our application. Verified on 2025-06-16."
+    }
+  ]
+}
